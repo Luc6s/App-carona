@@ -76,6 +76,7 @@ def perfil(x):
            
         if r == "1":
             z = find(usuario)
+
             q = []
             
             for l in range(len(z)):
@@ -87,7 +88,7 @@ def perfil(x):
             if q != []:
                 show3(q)
                 
-            menu(usuario, q)
+            menu(usuario)
             print("")
             
         elif r == "3":
@@ -96,9 +97,9 @@ def perfil(x):
         elif r == "2":
             
             menu2(usuario) 
-
-            
+    
         else:
+            print("Resposta inválida")
             perfil(1)
             
     elif s == "2":
@@ -114,6 +115,7 @@ def perfil(x):
             
             if b == []:
                 print("Nenhuma carona disponível")
+                perfil(1)
                 
             if b != []:
                 m = add(j)
@@ -127,6 +129,7 @@ def perfil(x):
             
             if b == []:
                 print("Nenhuma carona disponível")
+                perfil(1)
                 
             if b != []:
                 m = add(j)
@@ -146,12 +149,20 @@ def menu2(usuario):
     j = pesquisa(codigo("usuario"), 0)
     z = set(k) & set(j)
     z = list(z)
+
     z = int(z[0])
             
     with open("registrado.txt") as f:
         texto = f.readlines()[z]
     
     h = show(texto)
+
+    if h == []:
+        print("")
+        print("Nenhuma carona foi adicionada")
+        print("")
+        perfil(1)
+
     a = show4(texto)
     abrirl(h)
             
@@ -166,7 +177,7 @@ def menu2(usuario):
         menu2(usuario)
         
     if r == "2":
-        t = input("Qual o número da carona desejado?    ")
+        t = input("Qual o número da carona desejada?    ")
         t = int(t)
         a = str(a[t])
         a = a[1:]
@@ -179,16 +190,22 @@ def menu2(usuario):
         
         with open("registrado.txt") as f:
             texto = f.readlines()[z]
+        
         texto = show4(texto)
         texto = texto[0]
         texto = texto.strip()
         texto = texto + "+"
-        texto = tradutor(texto)        
+        texto = tradutor(texto)  
+        print("")      
         print(texto[4])
         menu2(usuario)
-        
-    else:
+
+    if r == "3":
         perfil(1)
+
+    else:
+        print("Mensagem inválida!   ")
+        menu2(usuario)
           
    
 def add(j):
@@ -200,14 +217,19 @@ def add(j):
         m = int(input("Qual o número da carona desejada?    "))
         y.append(j[m - 1])
         return y
-             
+
+    elif r == "n":
+        perfil(1)  
+
     else:
-        perfil(1)
+        print("Resposta inválida")
+        add(j)
       
                                 
-def menu(usuario, n):
+def menu(usuario):
     
     z = find(usuario)
+
     n = []
     for l in range(len(z)):
         d = z[l]
@@ -225,16 +247,25 @@ def menu(usuario, n):
         abrirl(l)
         
     if l == []:
+        print("")
         print("Nenhuma carona está sendo oferecida! ")
+        print("")
+
         o = input("Deseja adicionar(1) uma carona ou voltar(2)?   ")
+
         if o == "2":
-            o = "3"
+            perfil(1)
+
+        if o == "1":
+            p_dar(usuario)
+            menu(usuario)
+            perfil(1)
     
     o = input("Deseja adicionar(1) uma carona, apagar uma carona(2) ou voltar(3)?   ")
    
     if o == "1":
         p_dar(usuario)
-        menu(usuario, n)
+        menu(usuario)
         perfil(1)
     
     if o == "2":
@@ -255,10 +286,14 @@ def menu(usuario, n):
                         fw.write(line)
         
         print("Apagado com sucesso")
-        menu(usuario, n)
+        menu(usuario)
         
     if o == "3":
         perfil(1)
+
+    else:
+        print("Resposta inválida!   ")
+        menu(usuario)
                             
 def p_dar(x):
         

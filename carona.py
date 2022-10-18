@@ -113,7 +113,7 @@ def inicio2(x):
                  
         elif s != "ida" and s != "volta":
             print("Reposta inválida")
-            inicio2(x)  
+            return inicio2(x)  
             
     elif r == "2":
         return "2"
@@ -126,7 +126,7 @@ def inicio2(x):
     
     elif r != "2" and r != "1":
         print("Resposta inválida")
-        inicio2(x)
+        return inicio2(x)
    
 def receber(s, y):
     via = s
