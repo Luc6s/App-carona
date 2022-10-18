@@ -2,8 +2,6 @@
 from carona import *
 from login import *
 
-print("mudei")
-
 def addc(m, t):
     
     m = str(m[0])
