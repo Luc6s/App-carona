@@ -296,7 +296,7 @@ def dar(s, h):
             
             r = input("Deseja adicionar outra origem(limite de 3)? (s) ou (n):  ")
             if r == "s":
-                origem = origem + "_" + lugar(1)
+                origem = origem + " " + lugar(1)
                 x = x + 1
             if r == "n":
                 x = 10
@@ -308,7 +308,7 @@ def dar(s, h):
             
             r = input("Deseja adicionar outro destino(limite de 3)? (s) ou (n):  ")
             if r == "s":
-                bairro = bairro + "_" + destino(1)
+                bairro = bairro + " " + destino(1)
                 x = x + 1
             if r == "n":
                 x = 10

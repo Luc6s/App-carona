@@ -52,9 +52,12 @@ def registre():
     usuario = input('Digite o nome de usuário: ')
     validar(usuario)
     senha = input("Digite a senha: ")
+    espaco(senha)
+    
     if senha == "":
         print("Senha inválida: em branco. ")
         registre()
+        
     email = input("Digite o email: ")
     validar(email)
     dre = input("Digite seu DRE: ")
@@ -62,8 +65,15 @@ def registre():
     telefone = input("Digite seu telefone: ") 
     validar(telefone)
     diferente(usuario, senha, email, dre, telefone)
+    
     if diferente == 1:
         return registre()
+    
+    k = okay1()
+    
+    if k == 0:
+        return inicio()
+    
     login = ("\n" + codigo(usuario) + "-" + codigo(senha) + "-" + codigo(email) + "-" + codigo(dre) + "-" + codigo(telefone) + "-" + codigo("usuario") + "+")
     arq = open('registrado.txt', 'a')
     arq.write(login)
@@ -89,6 +99,7 @@ def diferente(a, b, c, d, e):
         
 
 def validar(e):
+    espaco(e)
     e = e.strip()
     e = codigo(e)
     arq = open('registrado.txt') 
@@ -96,7 +107,7 @@ def validar(e):
     if e == "" or e in registrados:
         print("Inválido; em branco ou já existente.")
         arq.close()
-        registre()
+        return registre()
     else:
         return 0
     
@@ -134,8 +145,27 @@ def abrir(t):
             if line.find(t) != -1:
                 return line
 
+def okay1():
+    
+    r = input("Confirma? (s) ou (n):    ")
+    
+    if r == "s":
+        return 1
+    
+    if r == "n":
+        return 0
 
-
+def espaco(x):
+    
+    a =  " " in  x
+    
+    if a:
+        print("O campo não pode conter espaços!    ")
+        return registre()
+    else:
+        pass
+           
 arq.close()
+
 
     
