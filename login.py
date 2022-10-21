@@ -1,5 +1,4 @@
 
-
 arq = open('registrado.txt', 'a')
 
 print("Seja bem-vindo!")
