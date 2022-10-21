@@ -29,15 +29,20 @@ def lugar(x):
         return "Qualquer Origem"
     
     
-def tempo1():
-    a = input("Algum horário de preferência? (s) ou (n) :    ")
+def tempo1(x):
+    
+    if x == 0:
+        a = input("Algum horário de preferência? (s) ou (n) :    ")
+    else:
+        a = "s"
+        
     if a == "s":
         hora = input("Hora(apenas de 20 em 20 min): hr:mn :   ")
         hora = hora.strip()
         if hora == "":
             print("Hora inválida")
-            tempo1()
-        return hora.lower()
+            tempo1(1)
+        return hora
     else:
         return "Qualquer Hora 1"
     
@@ -46,7 +51,7 @@ def tempo2():
         hora = hora.strip()
         if hora == "":
             hora = "Qualquer Hora 2"
-        return hora.lower()
+        return hora
     
 def destino(x):
     if x == 0:
@@ -135,8 +140,9 @@ def inicio2(x):
    
 def receber(s, y):
     via = s
+    dia = data()
     x = 0
-    hora1 = tempo1()
+    hora1 = tempo1(0)
     
     if hora1 != "Qualquer Hora 1":
         hora2 = tempo2()
@@ -184,13 +190,14 @@ def receber(s, y):
         bairro = ""
         
     h = pesquisa(via, 0)
+    q = pesquisa(dia, 0)
     j = pesquisa(hora1, "Qualquer Hora 1")
     g = pesquisa(origem, "Qualquer Origem")
     v = pesquisa(hora2, "Qualquer Hora 2")
     b = pesquisa(bairro, "Qualquer Destino")
     k = pesquisa(y, 0)
     c = pesquisa(codigo(y), 0)
-    z = (set(h) & set(j) & set(g) & set(b) & set(v))
+    z = (set(h) & set(j) & set(g) & set(b) & set(v) & set(q))
     z = list(z)
     
     m = k + c
@@ -212,49 +219,74 @@ def receber(s, y):
         arquivo.close()
         t = t + 1
     
-    
-        
     return l, o	
      
 def abrir2(f):
     
     f = str(f)
     x = []
-    y = ""
     
-    for a in f:
-        if a == "-":
-            a = ""
-            x.append(y)
-            y = ""
-        y = y + a
-    x.append(y)
+    x = f.split("-")
+    
     horas = str(x[3])
-    i = 0
-    h = ""
     
-    for b in horas:
-        
-        if b == "/" and i == 0:
-            i = 1
-            h1 = h
+    horas = horas.split("/")
+    h1 = horas[0]
+    h2 = horas[-1]
             
-        if b == "/":
-            h = ""    
-        h = h + b 
-        
-    h2 = h.strip() 
-    h2 = h2[1:]   
     h2 = h2.strip()
     h1 = h1.strip()
     user = str(x[0])
     via = str(x[1])
+    via = via.title()
     origens = str(x[2])
     bairros = str(x[4])
-    u = user + " / " + via + " / " + origens +  " / " + h1 + " até " + h2 +  " / " + bairros
+    dia = str(x[5])
+    
+    bairro1 = ""
+    bairro2 = ""
+    bairro3 = ""
+
+    t = len(bairros.split("_"))
+
+    if t == 3:
+        bairro1, bairro2, bairro3 = bairros.split("_")
+        
+    if t == 2:
+        bairro1, bairro2 = bairros.split("_")
+        
+    if t == 1:
+        bairro1 = bairros
+        
+    bairros = bairro1 + " " + bairro2 + " " + bairro3
+    
+    origem1 = ""
+    origem2 = ""
+    origem3 = ""
+
+    t = len(origens.split("_"))
+
+    if t == 3:
+        origem1, origem2, origem3 = origens.split("_")
+        
+    if t == 2:
+        origem1, origem2 = origens.split("_")
+        
+    if t == 1:
+        origem1 = origens
+        
+    origens = origem1 + " " + origem2 + " " + origem3
+    
+    origens = origens.strip()
+    bairros = bairros.strip()
+    origens = origens.title()
+    bairros = bairros.title()
+    dia = dia.strip()
+    
+    u = user + " / " + via + " / " + dia + " / " + origens +  " / " + h1 + " até " + h2 +  " / " + bairros
     
     if h1 == "Qualquer Hora 1" and h2 == "Qualquer Hora 2":
-        u = user + " / " + via + " / " + origens +  " / " + "Qualquer Hora" + " / " + bairros
+        u = user + " / " + via + " / " + dia + " / " + origens +  " / " + "Qualquer Hora" + " / " + bairros
         
     return u
 
@@ -272,7 +304,7 @@ def dar(s, h):
     user = str(h)
     x = 0
     via = s
-    hora1 = tempo1()
+    hora1 = tempo1(0)
 
     if hora1 != "Qualquer Hora 1":
         hora2 = tempo2()
@@ -283,12 +315,16 @@ def dar(s, h):
     if hora1 != "Qualquer Hora 1" and hora2 != "Qualquer Hora 2":
         while True:
             try:
-                entre = periodo(hora1, hora2)
+                entre = formatohora(hora1, hora2)
                 break
 
             except:
                 print("Formato de hora inserido incorreto!  ")
-
+                hora1 = tempo1(1)
+                hora2 = tempo2()
+    else:
+        entre = "NT"  
+        
     origem = lugar(0)
     
     if origem != "Qualquer Origem":
@@ -296,7 +332,7 @@ def dar(s, h):
             
             r = input("Deseja adicionar outra origem(limite de 3)? (s) ou (n):  ")
             if r == "s":
-                origem = origem + " " + lugar(1)
+                origem = origem + "_" + lugar(1)
                 x = x + 1
             if r == "n":
                 x = 10
@@ -308,87 +344,126 @@ def dar(s, h):
             
             r = input("Deseja adicionar outro destino(limite de 3)? (s) ou (n):  ")
             if r == "s":
-                bairro = bairro + " " + destino(1)
+                bairro = bairro + "_" + destino(1)
                 x = x + 1
             if r == "n":
                 x = 10
         
-    else:
-        entre = "NT"
+    caminho = ("\n" + user + "-" + via + "-" + origem + "-" + hora1 + " / " + entre + " / " + hora2 + "-" + bairro + "-" + d)
         
-    caminho = ("\n" + user + "-" + via + "-" + origem + "-" + hora1 + " / " + entre + " / " + hora2 + "-" + bairro)
-    
-    if hora1 == "Qualquer Hora 1":
-        horas = "Qualquer horário"
-        
-    else: 
-        horas = hora1 + " até " + hora2
-        
-    tela = (user + "-" + via + "-" + origem + "-" + hora1 + " / " + entre + " / " + hora2 + "-" + bairro)
+    tela = (user + "-" + via + "-" + origem + "-" + hora1 + " / " + entre + " / " + hora2 + "-" + bairro + "-" + d)
     arq2 = open('registrado.txt', 'r')
     p = okay() 
+    
+    if p == 0:
+        return caminho
 
     if tela not in arq2 and p == 1:
         arq2.close()
         arq2 = open('registrado.txt', 'a')
         arq2.write(caminho)
     
-    elif p == 0:
-        return caminho
-    
     else:
         print("Carona já existente! ")
         return caminho
-        
+    
+    print("")
+    print(abrir2(tela))
+    print("")
+    
     arq2.close()
     print("Carona adicionada com sucesso! ")
     
     return caminho
     
-def formato(f):
+def validarhora(f):
+    
+    if len(f) > 5:
+        return int("a")
+    
     h = ""
     m = ""
-    y = 0
-    for a in f:
-        if y >= 1:
-            m = m + a
-        if a == ":":
-            y = 1
-        if y == 0:
-            h = h + a
+    h, m = f.split(":")
+    k = ["00", "20", "40"]
+    erro = 0
+    
+    for a in range(len(k)):
+        if str(m) != k[a]:
+            erro = erro + 1
+            
+    if erro == 3:
+        return int("a")
+    
     h = int(h)
     m = int(m)
-    return h, m
+    
+    if h > 24:
+        return int("a")
+    
+    else:
+        return h, m
 
+def data_valida(d, m):
+    
+    if d > 31:
+        return 0
+    
+    if m > 12:
+        return 0
+    
+    t = [4, 6, 9, 11]
+    
+    for b in range(len(t)):
+        
+        if d > 30 and m == t[b]:
+            return 0
+        
+    h = [1, 3, 5, 7, 8, 10, 12]
+    
+    for n in range(len(h)):
+        
+        if d > 31 and m == h[n]:
+            return 0
+        
+    if d > 29 and m == 2:
+        return 0
+    
+    else:
+        return 1
+    
 def formatodata(f):
     if len(f) > 5:
         int("a")
-    h = ""
+    d = ""
     m = ""
     y = 0
-    for a in f:
-        if y >= 1:
-            m = m + a
-        if a == "/":
-            y = 1
-        if y == 0:
-            h = h + a
-    h = int(h)
+    
+    d, m = f.split("/")
+        
+    d = int(d)
     m = int(m)
     if m > 12:
         int("a")
     
-
-    m = str(m)
-    h = str(h)
-    d = h + ":" + m
-    return d
+    h = data_valida(d, m)
+    
+    if h:
+        m = str(m)
+        d = str(d)
+        g = d + "/" + m
+        return g
+    
+    else:
+        int("a")
         
-def periodo(t1, t2):
-    h1, m1 = formato(t1)
-    h2, m2 = formato(t2)
+def formatohora(t1, t2):
+    h1, m1 = validarhora(t1)
+    h2, m2 = validarhora(t2)
     x = []
     y = ""
+    
+    if h1 == h2 and m1 == m2:
+        return "NT"
     
     if h1 != h2:
         
@@ -409,10 +484,13 @@ def periodo(t1, t2):
         
     for a in range(len(x)):
         if x[a] == x[-1]:
-            y = y + str(x[a])
             break
         y = y + str(x[a]) + " / "
-     
+    
+    y = y.strip()
+    y = y[:-1]
+    y = y.strip()
+    
     return y
         
 def okay():

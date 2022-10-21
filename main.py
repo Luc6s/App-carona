@@ -75,18 +75,6 @@ def perfil(x):
         r = input("Deseja ver as caronas oferecidas(1), ver as caronas desejadas(2) ou voltar(3)?   ")
            
         if r == "1":
-            z = find(usuario)
-
-            q = []
-            
-            for l in range(len(z)):
-                d = z[l]
-                with open("registrado.txt") as f:
-                    texto = f.readlines()[d]
-                    q.append(texto)
-                    
-            if q != []:
-                show3(q)
                 
             menu(usuario)
             print("")
@@ -115,6 +103,7 @@ def perfil(x):
             
             if b == []:
                 print("Nenhuma carona disponível")
+                print("")
                 perfil(1)
                 
             if b != []:
@@ -237,11 +226,7 @@ def menu(usuario):
             texto = f.readlines()[d]
             n.append(texto)
     
-    l = []
-        
-    for v in range(len(n)):
-        c = abrir2(n[v])
-        l.append(c)
+    l = show3(n)
         
     if l != []:    
         abrirl(l)
@@ -335,31 +320,24 @@ def show(z):
         i.append(abrir2(str(g[a]))) 
                       
     return i
-        
+
 def show3(z):
     
-    z = str(z)
-    y = ""
+    a = 0
+    
+    while a < len(z):
+        if "+" in z[a]:
+            del z[a]
+            a = a + 1
+        a =  a + 1
+        
     i = []
-    g = []
     
-    for a in z:
+    for b in range(len(z)):
         
-        if a == "+":
-            a = ""
-            g.append(y)
-            y = ""
-            
-        y = y + a
+        i.append(str(abrir2(z[b])))
         
-    g.append(y)
-    
-    del g[0]
-    
-    for a in range(len(g)):
-    
-        i.append(abrir2(str(g[a]))) 
-                      
+    print(i)                  
     return i    
             
 def show4(z):
