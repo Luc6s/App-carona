@@ -118,6 +118,7 @@ def perfil(x):
             
             if b == []:
                 print("Nenhuma carona disponível")
+                print("")
                 perfil(1)
                 
             if b != []:
@@ -336,8 +337,7 @@ def show3(z):
     for b in range(len(z)):
         
         i.append(str(abrir2(z[b])))
-        
-    print(i)                  
+                         
     return i    
             
 def show4(z):
