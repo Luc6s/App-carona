@@ -2,6 +2,11 @@ from login import *
 
 arq2 = open('registrado.txt', 'a')
   
+def data():
+    a = input("Qual o dia da carona? dd/mm :   ")
+    a = a.strip()
+    return a
+    
 def lugar(x):
     
     if x == 0:
@@ -18,7 +23,7 @@ def lugar(x):
             print("Origem inválida")
             lugar()
             
-        return bairro
+        return bairro.lower()
         
     else:
         return "Qualquer Origem"
@@ -32,7 +37,7 @@ def tempo1():
         if hora == "":
             print("Hora inválida")
             tempo1()
-        return hora
+        return hora.lower()
     else:
         return "Qualquer Hora 1"
     
@@ -41,7 +46,7 @@ def tempo2():
         hora = hora.strip()
         if hora == "":
             hora = "Qualquer Hora 2"
-        return hora
+        return hora.lower()
     
 def destino(x):
     if x == 0:
@@ -54,7 +59,7 @@ def destino(x):
         if bairro == "":    
             print("Destino inválida")
             destino()
-        return bairro
+        return bairro.lower()
     else:
         return "Qualquer Destino"
     
@@ -256,14 +261,34 @@ def abrir2(f):
 
 def dar(s, h):
 
+    while True:
+        try:
+            d = data()
+            formatodata(d)
+            break
+        except:
+            print("Formato inserido incorreto!  ")
+
     user = str(h)
     x = 0
     via = s
     hora1 = tempo1()
+
     if hora1 != "Qualquer Hora 1":
         hora2 = tempo2()
-    else: hora2 = "Qualquer Hora 2"
-    
+
+    else: 
+        hora2 = "Qualquer Hora 2"
+
+    if hora1 != "Qualquer Hora 1" and hora2 != "Qualquer Hora 2":
+        while True:
+            try:
+                entre = periodo(hora1, hora2)
+                break
+
+            except:
+                print("Formato de hora inserido incorreto!  ")
+
     origem = lugar(0)
     
     if origem != "Qualquer Origem":
@@ -287,9 +312,6 @@ def dar(s, h):
                 x = x + 1
             if r == "n":
                 x = 10
-        
-    if hora1 != "Qualquer Hora 1" and hora2 != "Qualquer Hora 2":
-        entre = periodo(hora1, hora2)
         
     else:
         entre = "NT"
@@ -337,6 +359,30 @@ def formato(f):
     h = int(h)
     m = int(m)
     return h, m
+
+def formatodata(f):
+    if len(f) > 5:
+        int("a")
+    h = ""
+    m = ""
+    y = 0
+    for a in f:
+        if y >= 1:
+            m = m + a
+        if a == "/":
+            y = 1
+        if y == 0:
+            h = h + a
+    h = int(h)
+    m = int(m)
+    if m > 12:
+        int("a")
+    
+
+    m = str(m)
+    h = str(h)
+    d = h + ":" + m
+    return d
         
 def periodo(t1, t2):
     h1, m1 = formato(t1)
