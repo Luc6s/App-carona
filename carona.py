@@ -139,8 +139,21 @@ def inicio2(x):
         return inicio2(x)
    
 def receber(s, y):
+
     via = s
-    dia = data()
+
+    w = input("Deseja alguma data como filtro? (s) ou (n) :   ")
+    w = w.strip()
+
+    if w == "s":
+        dia = data()
+
+    if w == "n":
+        dia = ""
+
+    else:
+        return receber(s, y)
+
     x = 0
     hora1 = tempo1(0)
     
@@ -188,8 +201,13 @@ def receber(s, y):
         
     if bairro == "Qualquer Destino":
         bairro = ""
-        
-    h = pesquisa(via, 0)
+    
+    if via == "":
+        u = pesquisa("volta", 0)
+        i = pesquisa("ida", 0)
+        h = u + i
+    else:
+        h = pesquisa(via, 0)
     q = pesquisa(dia, 0)
     j = pesquisa(hora1, "Qualquer Hora 1")
     g = pesquisa(origem, "Qualquer Origem")
@@ -432,7 +450,7 @@ def data_valida(d, m):
         return 1
     
 def formatodata(f):
-    if len(f) > 5:
+    if len(f) != 5:
         int("a")
     d = ""
     m = ""

@@ -106,16 +106,58 @@ def perfil(x):
             
     elif s == "2":
         
-        g = input("ida ou volta?    ")
-        g = g.strip()
-        
-        if g == "ida":
+        p = input("Alguma preferência de ida ou volta? (s) ou (n)  ")
+        p = p.strip()
+
+        if p == "s":
+            g = input("ida ou volta?    ")
+            g = g.strip()
+            
+            
+            if g == "ida":
+                b, j = receber(g, usuario)
+                print("")
+                abrirl(b)
+                print("")
+                
+                if b == []:
+                    print("Nenhuma carona disponível")
+                    print("")
+                    perfil(1)
+                    
+                if b != []:
+                    m = add(j)
+                    addc(m, usuario)
+                    
+            elif g == "volta":
+                b, j = receber(g, usuario)
+                print("")
+                abrirl(b)
+                print("")
+                
+                if b == []:
+                    print("Nenhuma carona disponível")
+                    print("")
+                    perfil(1)
+                    
+                if b != []:
+                    m = add(j)
+                    addc(m, usuario)
+                    
+                        
+            elif g != "ida" and g != "volta":
+                print("Reposta inválida")
+                perfil(1)
+
+        if p == "n":
+
+            g = ""
             b, j = receber(g, usuario)
             print("")
             abrirl(b)
             print("")
             
-            if b == []:
+            if b == []:                    
                 print("Nenhuma carona disponível")
                 print("")
                 perfil(1)
@@ -123,27 +165,11 @@ def perfil(x):
             if b != []:
                 m = add(j)
                 addc(m, usuario)
-                
-        elif g == "volta":
-            b, j = receber(g, usuario)
-            print("")
-            abrirl(b)
-            print("")
-            
-            if b == []:
-                print("Nenhuma carona disponível")
-                print("")
-                perfil(1)
-                
-            if b != []:
-                m = add(j)
-                addc(m, usuario)
-                
-                       
-        elif g != "ida" and g != "volta":
-            print("Reposta inválida")
+
+        else:
+            print("Mensagem inválida!   ")
             perfil(1)
-            
+
     else:
         perfil(1)
 
@@ -171,10 +197,13 @@ def menu2(usuario):
     abrirl(h)
             
     r = input("Deseja exluir(1) uma carona ; pegar o contato(2) ; voltar(3)?    ")
-    
+
     if r == "1":
         t = input("Qual o número desejado? ")
         t = int(t)
+        if t > len(h) or t == 0:
+            print("Número inválido")
+            return menu2(usuario)
         del a[t]
         a = LtoS(a)
         alterar_linha(z, a)
@@ -183,6 +212,9 @@ def menu2(usuario):
     if r == "2":
         t = input("Qual o número da carona desejada?    ")
         t = int(t)
+        if t > len(h) or t == 0:
+            print("Número inválido")
+            return menu2(usuario)
         a = str(a[t])
         a = a[1:]
         a = abrir3(a)
@@ -219,7 +251,11 @@ def add(j):
     
     if r == "s":
         m = int(input("Qual o número da carona desejada?    "))
-        y.append(j[m - 1])
+        try:
+            y.append(j[m - 1])
+        except:
+            print("Número inválido! ")
+            return add(j)
         return y
 
     elif r == "n":
@@ -260,6 +296,10 @@ def menu(usuario):
             p_dar(usuario)
             menu(usuario)
             perfil(1)
+        
+        else:
+            print("Resposta inválida!   ")
+            menu(usuario)
     
     o = input("Deseja adicionar(1) uma carona, apagar uma carona(2) ou voltar(3)?   ")
    
@@ -270,10 +310,15 @@ def menu(usuario):
     
     if o == "2":
         
-        h = input("Qual o número para apagar?   ")
-        h = int(h)
-        h = h - 1
-        j = str(n[h])
+        while True:
+            try:
+                h = input("Qual o número para apagar?   ")
+                h = int(h)
+                h = h - 1
+                j = str(n[h])
+                break
+            except:
+                print("número inválido")
         j = j.strip()
         
         with open('registrado.txt', 'r') as fr:
