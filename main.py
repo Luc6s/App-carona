@@ -55,7 +55,21 @@ def desejadas(usuario):
 
     return h
 
+def linhabranca():
+    
+    with open("registrado.txt", 'r') as fr:
+        lines = fr.readlines()
+  
+        with open("registrado.txt", 'w') as fw:
+            for line in lines:
+
+                if line.strip('\n') != "":
+                    fw.write(line)
+            
+
 def perfil(x):   
+    
+    linhabranca()
     
     global dade
     if x == 0:
