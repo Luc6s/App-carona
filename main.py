@@ -69,6 +69,7 @@ def linhabranca():
 
 def perfil(x):   
     
+    atual()
     linhabranca()
     
     global dade
@@ -200,7 +201,13 @@ def menu2(usuario):
 
     if r == "1":
         t = input("Qual o número desejado? ")
-        t = int(t)
+        
+        try:
+            t = int(t)
+        except:
+            print("Número inválido! 	")
+            return menu2(usuario)
+        
         if t > len(h) or t == 0:
             print("Número inválido")
             return menu2(usuario)
@@ -210,11 +217,18 @@ def menu2(usuario):
         menu2(usuario)
         
     if r == "2":
+        
         t = input("Qual o número da carona desejada?    ")
-        t = int(t)
+        try:
+            t = int(t)
+        except:
+            print("Número inválido! 	")
+            return menu2(usuario)
+        
         if t > len(h) or t == 0:
             print("Número inválido")
             return menu2(usuario)
+        
         a = str(a[t])
         a = a[1:]
         a = abrir3(a)
@@ -250,8 +264,9 @@ def add(j):
     r = input("Deseja adicionar alguma carona? (s) ou (n) :   ")
     
     if r == "s":
-        m = int(input("Qual o número da carona desejada?    "))
+        m = input("Qual o número da carona desejada?    ")
         try:
+            m = int(m)
             y.append(j[m - 1])
         except:
             print("Número inválido! ")
@@ -269,6 +284,11 @@ def add(j):
 def menu(usuario):
     
     z = find(usuario)
+    m = find("+")
+    
+    for g in range(len(m)):
+        if m[g] in z:
+            z.remove(m[g])
 
     n = []
     for l in range(len(z)):
@@ -478,6 +498,91 @@ def abrir3(f):
     user = str(x[0])
 
     return user
+
+def relogio():
+
+    caronas = find("volta") + find("ida")
+
+    linhas = []
+    for l in range(len(caronas)):
+        d = caronas[l]
+        with open("registrado.txt") as f:
+            texto = f.readlines()[d]
+            linhas.append(texto)
+
+    datas = []
+    for a in linhas:
+        a = a.split("-")
+        if "+" not in a[5]:
+            datas.append(a[5].strip())
+
+    return datas
+
+def atual():
+
+    datas = relogio()
+    tempo = datetime.now()
+    diaAtual = tempo.day
+    mesAtual = tempo.month
+
+    z = len(datas)
+    a = 0
+    while a < z:
+        x = datas[a].split("/")
+        mes = int(x[1])
+
+        if mes > mesAtual:
+            del datas[a]
+            z = z - 1
+            a = a - 1
+
+        a = a + 1
+     
+    a = 0    
+    while a < z:
+        x = datas[a].split("/")
+        dia = int(x[0])
+        mes = int(x[1])
+
+        if mes == mesAtual and dia >= diaAtual:
+            del datas[a]
+            z = z - 1
+            a = a - 1
+        a = a + 1
+    
+    caronas = pesquisa(datas, "sdfdfs")
+    
+    linhas = []
+    for l in range(len(caronas)):
+        d = caronas[l]
+        with open("registrado.txt") as f:
+            texto = f.readlines()[d]
+            linhas.append(texto)    
+    
+    novaslinhas = []
+    for b in linhas:
+        if "+" in b:
+            b = b.strip()
+            k = b.split("+")
+            h = k
+            for g in k:
+                for t in datas:
+                    if t in g:
+                        h.remove(g)
+            m = ""
+            for j in h:
+                m = m + j + "+"
+                
+            m = m[:-1]
+            h = m
+                
+        else:
+            h = ""
         
+        novaslinhas.append(h)
+    
+    for c in range(len(novaslinhas)):
+        
+        alterar_linha(caronas[c], novaslinhas[c])        
 
 perfil(0)

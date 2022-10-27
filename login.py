@@ -49,20 +49,23 @@ def acesso():
 def registre():
     
     usuario = input('Digite o nome de usuário: ')
+    usuario = usuario.strip()
     validar(usuario)
     senha = input("Digite a senha: ")
+    senha = senha.strip()
     espaco(senha)
     
     if senha == "":
         print("Senha inválida: em branco. ")
-        registre()
+        return registre()
         
     email = input("Digite o email: ")
+    email = email.strip()
     validar(email)
     dre = input("Digite seu DRE: ")
+    dre = dre.strip()
     validar(dre)
-    telefone = input("Digite seu telefone: ") 
-    validar(telefone)
+    telefone = numero()
     diferente(usuario, senha, email, dre, telefone)
     
     if diferente == 1:
@@ -79,8 +82,43 @@ def registre():
     arq.close()
     print("Cadastros feito com sucesso! ")
     return inicio()
+
+def numero():
+    
+    telefone = input("Digite seu telefone com DD: ") 
+    telefone = telefone.strip()
+    validar(telefone)
+    
+    try:
+        int(telefone)
+        
+    except:
+        
+        print("Respota inválida! (apenas números são aceitos) ")
+        return numero()
+    
+    if len(telefone) != 11:
+        print("Número inválido!")
+        return numero()            
+    
+    telefone = validartele(telefone)
+    validar(telefone)
+    
+    return telefone
+
+def validartele(x):
+    
+    x = list(x)
+    x.insert(0, "(")
+    x.insert(3, ")")
+    y = ""
+    for b in range(len(x)):
+        y = y + x[b]
+        
+    return y
     
 def codigo(u):
+    u = u.strip()
     id = []  
     for letra in u:
         x = ord(letra) - 28
@@ -100,6 +138,13 @@ def diferente(a, b, c, d, e):
 def validar(e):
     espaco(e)
     e = e.strip()
+    acentos = ["á", "é", "í", "ó", 'ú', "â", "ê", "î", "ô", "û", "ã", "õ", 'à', "è", "ì", "ò", "ù"]
+    
+    for a in acentos:
+        if a in e.lower():
+            print("Reposta inválida: Não é permitido acento.    ")
+            return registre() 
+        
     e = codigo(e)
     arq = open('registrado.txt') 
     registrados = arq.read()
@@ -153,6 +198,11 @@ def okay1():
     
     if r == "n":
         return 0
+    
+    else:
+        print("Resposta inválida!   ")
+        return okay1()
+        
 
 def espaco(x):
     
