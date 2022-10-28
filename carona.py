@@ -1,8 +1,10 @@
 from login import *
+from datetime import date, datetime
 
 arq2 = open('registrado.txt', 'a')
   
 def data():
+    
     a = input("Qual o dia da carona? dd/mm :   ")
     a = a.strip()
     return a
@@ -48,20 +50,26 @@ def tempo1(x):
     
 def tempo2():
     
-        k = input("Deseja um período de tempo? (s) ou (n)  ")
-        if k == "s":
-            hora = input("Até(apenas de 5 em 5 min): hr:mn :   ")
-            hora = hora.strip()
-            if hora == "":
-                hora = "Qualquer Hora 2"
-        if k == "n":
-            return 90
+    k = input("Deseja um período de tempo? (s) ou (n)  ")
+    if k == "s":
+        hora = input("Até(apenas de 5 em 5 min): hr:mn :   ")
+        hora = hora.strip()
         
-        else:
-            print("Resposta Inválida!   ")
+        if hora == "":
+            print("Resposta inválida!   ")
             return tempo2()
         
-        return hora
+        else:
+            return hora    
+        
+    if k == "n":
+        return 90
+        
+    else:
+        print("Resposta Inválida!   ")
+        return tempo2()
+        
+        
     
 def destino(x):
     if x == 0:
@@ -154,34 +162,97 @@ def periododia(dia1):
     p = input("Deseja um período de data? (s) ou (n)  ")
 
     if p == "s":
+        
         while True:
             try:
                 dia2 = data()
                 formatodata(dia2)
+                conferirdia(dia2)
                 break
             except:
                 print("Formato inserido incorreto!  ")
         
         d1, m1 = dia1.split("/")
         d2, m2 = dia2.split("/")
+        
+        if d1 == d2 and m1 == m2:
+            print("Inválido!    ")
+            return periododia(dia1) 
+        
+        elif d1 <= d2 and m1 <= m2:
+            print("Resposta inválida!   ")
+            return periododia(dia1)
+        
         d1 = int(d1)
         m1 = int(m1)
         d2 = int(d2)
         m2 = int(m2)
         data3 = []
+        data3.append(dia1)
+        n = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        
         while m1 < m2:
+            d1 = int(d1)
+            d1 = d1 + 1
             a = data_valida(d1, m1)
             
             if a == 0:
-                d1 = 0
+                d1 = 1
                 m1 = m1 + 1
                 
+            if d1 in n:
+                d1 = str(d1)
+                d1 = "0" + d1
+            d1 = str(d1)
+            
+            date = d1 + "/" + str(m1)    
+            data3.append(date)
+            
+        d1 = int(d1)  
+          
+        while d1 < d2:
+            
             d1 = d1 + 1
+            
+            if d1 in n:
+                d1 = str(d1)
+                d1 = "0" + d1
+                
+            d1 = str(d1)
+            date = d1 + "/" + str(m1) 
+            data3.append(date)
+            d1 = int(d1)
+            
+        return data3    
+       
+    if p == "n": 
+        return dia1
+    
+    else:
+        print("Resposta inválida!   ")
+        return periododia(dia1)
                
 def receber(s, y):
 
     via = s
-
+    tempo = datetime.now()
+    diaAtual = tempo.day
+    mesAtual = tempo.month
+    num = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+    if diaAtual in num:
+        diaAtual = str(diaAtual)
+        diaAtual = "0" + diaAtual
+        
+    diaAtual = str(diaAtual)
+    
+    if mesAtual in num:
+        mesAtual = str(mesAtual)
+        mesAtual = "0" + mesAtual 
+           
+    mesAtual = str(mesAtual)        
+    data1 = diaAtual + "/" + mesAtual
+    
     w = input("Deseja alguma data como filtro? (s) ou (n) :   ")
     w = w.strip()
 
@@ -190,15 +261,19 @@ def receber(s, y):
             try:
                 dia = data()
                 formatodata(dia)
+                conferirdia(dia)
                 break
             except:
                 print("Formato inserido incorreto!  ")
-        periodo = periododia(dia)
+                
+        dia = periododia(dia)
             
     if w == "n":
         dia = ""
 
-    else:
+    if w != "s" and w != "n":
+
+        print("Resposta inválida!   ")
         return receber(s, y) 
 
     x = 0
@@ -206,10 +281,32 @@ def receber(s, y):
     
     if hora1 != "Qualquer Hora 1":
         hora2 = tempo2()
-        if hora2 == 90:
-            hora2 = hora1
         
-    else: hora2 = "Qualquer Hora 2"
+        if hora2 == "Qualquer Hora 2":
+            b = conferirhora(hora1, data1)
+            
+            if b:
+                while True:
+                    hora1 = tempo1(1)
+                    b = conferirhora(hora1, data1)
+                    if b:
+                        break
+                    
+        if hora2 == 90:
+            hora2 = hora1        
+        
+        else:
+            b = conferirhora(hora2, data1)
+            
+            if b:
+                while True:
+                    hora2 = tempo2()
+                    b = conferirhora(hora2, data1)
+                    if b:
+                        break
+        
+    else: 
+        hora2 = "Qualquer Hora 2"
     
     if hora1 == "Qualquer Hora 1":
         hora1 = ""
@@ -217,6 +314,7 @@ def receber(s, y):
         
     if hora2 == "Qualquer Hora 2":
         hora2 = ""
+        
     origem = []
     origem.append(lugar(0))
         
@@ -375,10 +473,11 @@ def dar(s, h):
         try:
             d = data()
             formatodata(d)
+            conferirdia(d)
             break
         except:
             print("Formato inserido incorreto!  ")
-
+            
     user = str(h)
     x = 0
     via = s
@@ -386,8 +485,19 @@ def dar(s, h):
     hora1 = tempo1(0)
 
     if hora1 != "Qualquer Hora 1":
+        
         hora2 = tempo2()
         
+        if hora2 == "Qualquer Hora 2":
+            b = conferirhora(hora1, d)
+            
+            if b:
+                while True:
+                    hora1 = tempo1(1)
+                    b = conferirhora(hora1, d)
+                    if b:
+                        break
+                    
         if hora2 == 90:
             hora2 = hora1
 
@@ -398,6 +508,10 @@ def dar(s, h):
         while True:
             try:
                 entre = formatohora(hora1, hora2)
+                erro = conferirhora(hora2, d)
+                if erro:
+                    print("erro")
+                    int("a")
                 break
 
             except:
@@ -406,6 +520,7 @@ def dar(s, h):
                 hora2 = tempo2()
     else:
         entre = "NT"  
+    
         
     while True:            
         try:            
@@ -493,6 +608,7 @@ def validarhora(f):
         return int("a")
     
     else:
+        
         return h, m
 
 def data_valida(d, m):
@@ -524,16 +640,18 @@ def data_valida(d, m):
         return 1
     
 def formatodata(f):
+    
     if len(f) != 5:
         int("a")
+        
     d = ""
     m = ""
-    y = 0
     
     d, m = f.split("/")
         
     d = int(d)
     m = int(m)
+    
     if m > 12:
         int("a")
     
@@ -556,6 +674,10 @@ def formatohora(t1, t2):
     
     if h1 == h2 and m1 == m2:
         return "NT"
+    
+    elif h1 >= h2 and m1 >= m2:
+        print("Resposta inválida de tempo!  ")
+        int("a")
     
     if h1 != h2:
         
@@ -603,6 +725,57 @@ def okay():
         print("Respota inválida!    ")
         return okay()
     
+
+def conferirdia(dia):
+    
+    tempo = datetime.now()
+    diaAtual = tempo.day
+    mesAtual = tempo.month
+    
+    d, m = dia.split("/")
+    d = int(d)
+    m = int(m)
+     
+    if m < mesAtual:
+        
+        print("A data precisa ser pelo menos atual")
+        return int("a")
+    
+    elif m == mesAtual and d < diaAtual:
+        
+        print("A data precisa ser pelo menos atual")
+        return int("a")
+    
+    else:
+        pass
+    
+def conferirhora(hora, data):
+    
+    tempo = datetime.now()
+    
+    horaatual = tempo.hour
+    minutoatual = tempo.minute
+    diaAtual = tempo.day
+    mesAtual = tempo.month
+    d, m = data.split("/")
+    h, min = hora.split(":")
+    h = int(h) + 2
+    min = int(min)
+    d = int(d)
+    m = int(m)
+    
+    if d == diaAtual and m == mesAtual:
+        
+        if h < horaatual:
+            print("A hora pode ser no máximo 2 horas atrás! ")
+            return 1
+        
+        if  horaatual == h and min < minutoatual:
+            print("A hora pode ser no máximo 2 horas atrás! ")
+            return 1
+        
+    else:    
+        return 0
     
 arq2.close()
 

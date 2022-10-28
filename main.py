@@ -560,6 +560,7 @@ def atual():
             linhas.append(texto)    
     
     novaslinhas = []
+    
     for b in linhas:
         if "+" in b:
             b = b.strip()

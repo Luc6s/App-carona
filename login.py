@@ -66,10 +66,11 @@ def registre():
     dre = dre.strip()
     validar(dre)
     telefone = numero()
-    diferente(usuario, senha, email, dre, telefone)
+    v = diferente(usuario, senha, email, dre, telefone)
     
-    if diferente == 1:
+    if v == 0:
         return registre()
+    
     
     k = okay1()
     
