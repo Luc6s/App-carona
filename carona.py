@@ -508,7 +508,13 @@ def dar(s, h):
         while True:
             try:
                 entre = formatohora(hora1, hora2)
-                erro = conferirhora(hora2, d)
+                
+                if hora2 != "Qualquer Hora 2":
+                    erro = conferirhora(hora2, d)
+                    
+                if hora1 == "Qualquer Hora 2":
+                    erro = conferirhora(hora1, d)
+                    
                 if erro:
                     print("erro")
                     int("a")
@@ -518,6 +524,8 @@ def dar(s, h):
                 print("Formato de hora inserido incorreto!  ")
                 hora1 = tempo1(1)
                 hora2 = tempo2()
+                if hora2 == 90:
+                    hora2 = hora1
     else:
         entre = "NT"  
     
@@ -759,7 +767,7 @@ def conferirhora(hora, data):
     mesAtual = tempo.month
     d, m = data.split("/")
     h, min = hora.split(":")
-    h = int(h) + 2
+    h = int(h) 
     min = int(min)
     d = int(d)
     m = int(m)
